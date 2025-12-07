@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizational Learning Culture Index | Effilor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --effilor-purple: #6B3D7A;
+            --effilor-purple-dark: #552F61;
+            --effilor-purple-light: #8B5D9A;
+            --gold-accent: #D4AF37;
+            --bg-cream: #FDFBF7;
+            --text-dark: #2C2C2C;
+            --text-gray: #5A5A5A;
+            --border-light: #E8E8E8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .serif-heading {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            display: block;
+            margin: 0 auto 2rem;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .logo-small {
+            max-width: 120px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-large {
+            max-width: 300px;
+            margin-bottom: 2.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--effilor-purple);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary:hover {
+            background: var(--effilor-purple-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 61, 122, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--effilor-purple);
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--effilor-purple);
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--effilor-purple);
+            color: white;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            background: var(--border-light);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--effilor-purple), var(--effilor-purple-light));
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .pillar-badge {
+            display: inline-block;
+            background: var(--effilor-purple-light);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .answer-option {
+            background: white;
+            border: 2px solid var(--border-light);
+            padding: 1.25rem 1.5rem;
+            margin: 0.75rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .answer-option:hover {
+            border-color: var(--effilor-purple-light);
+            background: #FDFBF7;
+        }
+        
+        .answer-option.selected {
+            background: var(--effilor-purple);
+            border-color: var(--effilor-purple);
+            color: white;
+        }
+        
+        .answer-label {
+            font-weight: 600;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .score-display {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .score-number {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--effilor-purple);
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .score-badge.low {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .score-badge.mid {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .score-badge.high {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .pillar-result {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .pillar-bar {
+            background: var(--border-light);
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .pillar-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--effilor-purple), var(--effilor-purple-light));
+            border-radius: 12px;
+            transition: width 0.8s ease;
+        }
+        
+        .highlight-box {
+            border-left: 4px solid var(--gold-accent);
+            background: #FFFBEB;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .form-group {
+            margin: 1.5rem 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--effilor-purple);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        
+        .info-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--effilor-purple);
+            font-family: 'Playfair Display', serif;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .question-card {
+                padding: 1.5rem;
+            }
+            
+            .score-number {
+                font-size: 3.5rem;
+            }
+            
+            .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <img src="./effilor-logo.jpg" alt="Effilor Logo" class="logo logo-large">
+            
+            <div class="question-card" style="text-align: center;">
+                <h1 class="serif-heading" style="font-size: 2.5rem; color: var(--effilor-purple); margin-bottom: 1rem;">
+                    Organizational Learning Culture Index
+                </h1>
+                <p style="font-size: 1.2rem; color: var(--text-gray); margin-bottom: 2rem;">
+                    Assess your organization's capability to enable, support, sustain, and capture value from learning
+                </p>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-number">24</div>
+                        <p style="color: var(--text-gray); margin-top: 0.5rem;">Questions</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-number">8-10</div>
+                        <p style="color: var(--text-gray); margin-top: 0.5rem;">Minutes</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-number">4</div>
+                        <p style="color: var(--text-gray); margin-top: 0.5rem;">Key Pillars</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="text-align: left; margin: 2.5rem 0;">
+                    <h3 style="font-weight: 700; margin-bottom: 1rem; color: var(--text-dark);">What You'll Discover:</h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--gold-accent);">✓</span>
+                            How your learning infrastructure compares to high-performing organizations
+                        </li>
+                        <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--gold-accent);">✓</span>
+                            Whether your managers actively support employee development
+                        </li>
+                        <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--gold-accent);">✓</span>
+                            If learning is truly valued in your organizational culture
+                        </li>
+                        <li style="margin: 0.75rem 0; padding-left: 1.5rem; position: relative;">
+                            <span style="position: absolute; left: 0; color: var(--gold-accent);">✓</span>
+                            Your capability to capture and demonstrate learning's business impact
+                        </li>
+                    </ul>
+                </div>
+                
+                <button class="btn-primary" onclick="startAssessment()">Begin Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Screen -->
+    <div id="question-screen" class="screen">
+        <div class="container">
+            <img src="./effilor-logo.jpg" alt="Effilor Logo" class="logo logo-small">
+            
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <p style="text-align: center; color: var(--text-gray); margin-bottom: 0.5rem;">
+                Question <span id="current-q">1</span> of 24
+            </p>
+            
+            <div class="question-card">
+                <div id="pillar-badge" class="pillar-badge">Learning Infrastructure</div>
+                <h2 id="question-text" style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--text-dark);"></h2>
+                
+                <div id="answers-container"></div>
+                
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: space-between;">
+                    <button id="prev-btn" class="btn-secondary" onclick="previousQuestion()" style="display: none;">
+                        Previous Question
+                    </button>
+                    <div style="flex-grow: 1;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="container">
+            <img src="./effilor-logo.jpg" alt="Effilor Logo" class="logo logo-small">
+            
+            <div class="question-card">
+                <div class="score-display">
+                    <h2 class="serif-heading" style="font-size: 2rem; margin-bottom: 1rem;">Your Learning Culture Score</h2>
+                    <div class="score-number" id="total-score">0</div>
+                    <p style="color: var(--text-gray); font-size: 1.1rem;">out of 120 points</p>
+                    <div id="score-badge" class="score-badge"></div>
+                </div>
+                
+                <div id="score-description" style="padding: 2rem; line-height: 1.8; color: var(--text-dark);"></div>
+                
+                <h3 class="serif-heading" style="font-size: 1.8rem; margin: 3rem 0 1.5rem; color: var(--effilor-purple);">
+                    Your Pillar Breakdown
+                </h3>
+                
+                <div id="pillar-results"></div>
+                
+                <div style="margin: 3rem 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: #ECFDF5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #10B981;">
+                            <h4 style="font-weight: 700; color: #065F46; margin-bottom: 0.5rem;">Top Strength</h4>
+                            <p id="top-strength" style="color: #047857;"></p>
+                        </div>
+                        <div style="background: #FEF3C7; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #F59E0B;">
+                            <h4 style="font-weight: 700; color: #92400E; margin-bottom: 0.5rem;">Priority Area</h4>
+                            <p id="priority-area" style="color: #B45309;"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="detailed-feedback"></div>
+                
+                <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-cream); border-radius: 8px;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--effilor-purple);">
+                        Want Your Detailed Report?
+                    </h3>
+                    <p style="color: var(--text-gray); margin-bottom: 1.5rem;">
+                        Receive a comprehensive analysis with personalized recommendations for building a stronger learning culture
+                    </p>
+                    <button class="btn-primary" onclick="showEmailForm()">Get Your Full Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Capture Screen -->
+    <div id="email-screen" class="screen">
+        <div class="container">
+            <img src="./effilor-logo.jpg" alt="Effilor Logo" class="logo logo-small">
+            
+            <div class="question-card">
+                <h2 class="serif-heading" style="font-size: 2rem; margin-bottom: 1rem; color: var(--effilor-purple);">
+                    Get Your Detailed Report
+                </h2>
+                <p style="color: var(--text-gray); margin-bottom: 2rem;">
+                    We'll send you a comprehensive analysis within 24 hours, including specific recommendations tailored to your organization's learning culture profile.
+                </p>
+                
+                <form id="email-form" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-input" id="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-input" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Organization Name *</label>
+                        <input type="text" class="form-input" id="organization" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Job Role/Title *</label>
+                        <input type="text" class="form-input" id="role" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number (Optional)</label>
+                        <input type="tel" class="form-input" id="phone">
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin: 1.5rem 0;">
+                        Your information will be kept confidential and used only to send your assessment report.
+                    </p>
+                    
+                    <button type="submit" class="btn-primary" id="submit-btn">Send My Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thank You Screen -->
+    <div id="thankyou-screen" class="screen">
+        <div class="container">
+            <img src="./effilor-logo.jpg" alt="Effilor Logo" class="logo logo-large">
+            
+            <div class="question-card" style="text-align: center;">
+                <div style="font-size: 4rem; color: var(--effilor-purple); margin-bottom: 1rem;">✓</div>
+                <h2 class="serif-heading" style="font-size: 2.5rem; color: var(--effilor-purple); margin-bottom: 1rem;">
+                    Thank You, <span id="user-name"></span>!
+                </h2>
+                <p style="font-size: 1.2rem; color: var(--text-gray); margin-bottom: 2rem;">
+                    Your detailed Learning Culture Index report will be delivered to:
+                </p>
+                <p style="font-size: 1.3rem; font-weight: 600; color: var(--effilor-purple); margin-bottom: 2rem;">
+                    <span id="user-email"></span>
+                </p>
+                <p style="color: var(--text-gray); margin-bottom: 3rem;">
+                    within the next 24 hours
+                </p>
+                
+                <div class="highlight-box">
+                    <h3 style="font-weight: 700; margin-bottom: 1rem;">What happens next?</h3>
+                    <p style="margin-bottom: 1rem;">
+                        Our team will review your assessment and prepare a comprehensive report with:
+                    </p>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin: 0.75rem 0;">📊 Detailed analysis of your learning culture strengths and gaps</li>
+                        <li style="margin: 0.75rem 0;">🎯 Specific, actionable recommendations for improvement</li>
+                        <li style="margin: 0.75rem 0;">📈 Benchmarking against high-performance learning organizations</li>
+                        <li style="margin: 0.75rem 0;">💡 Strategic insights tailored to your organization's context</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-cream); border-radius: 8px;">
+                    <h3 style="font-size: 1.3rem; margin-bottom: 1rem;">Questions or want to discuss your results?</h3>
+                    <p style="color: var(--text-gray); margin-bottom: 1rem;">
+                        Contact us at: <strong>shankar.ramamurthy@effilor.com</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logo URL
+        const LOGO_URL = "./effilor-logo.jpg";
+        
+        // Assessment Data
+        const PILLARS = [
+            {
+                name: "Learning Infrastructure",
+                questions: [
+                    "We conduct structured skill gap analyses at least twice a year for all employees",
+                    "Learning pathways are clearly defined and aligned to specific career progression routes",
+                    "Employees have easy access to learning resources without requiring multiple approvals or budget justifications",
+                    "Learning opportunities are systematically communicated through established channels, not shared informally",
+                    "Individual development plans are created during performance reviews and tracked quarterly",
+                    "We maintain a catalog of required competencies for each role level across the organization"
+                ]
+            },
+            {
+                name: "Learning Support",
+                questions: [
+                    "Managers dedicate at least one 1:1 meeting per quarter to discuss each employee's learning goals",
+                    "Employees have protected time to pursue learning without sacrificing their core deliverables",
+                    "Manager performance evaluations include their team's development and capability growth as a metric",
+                    "We provide formal mentorship programs pairing experienced professionals with developing employees",
+                    "Employees can experiment with new approaches without fear of negative consequences for honest failures",
+                    "Learning budgets are allocated per employee and refreshed annually, not treated as discretionary spending"
+                ]
+            },
+            {
+                name: "Learning Culture",
+                questions: [
+                    "Leadership team members visibly participate in learning programs alongside employees",
+                    "We have regular forums where teams present learnings from projects or training to their peers",
+                    "Employees who apply new skills are given opportunities to use them in meaningful work assignments",
+                    "Learning achievements are recognized in town halls, newsletters, or team meetings at least quarterly",
+                    "Cross-functional knowledge sharing happens through structured channels, not just informal conversations",
+                    "Our senior leaders regularly discuss their own learning journeys publicly to model continuous development"
+                ]
+            },
+            {
+                name: "Learning Impact",
+                questions: [
+                    "We systematically collect feedback from learners on how they've applied new skills within 90 days of training",
+                    "When employees are promoted or achieve significant wins, we document whether learning programs contributed",
+                    "We track capability growth for teams over 12-month periods using observable performance indicators",
+                    "Learning impact data is presented to leadership at least twice a year with specific business examples",
+                    "We compare performance metrics before and after major learning interventions to measure effectiveness",
+                    "Success stories linking learning to business outcomes are documented and shared across the organization"
+                ]
+            }
+        ];
+
+        const ANSWER_OPTIONS = [
+            { label: 'A', text: 'Strongly Disagree', value: 1 },
+            { label: 'B', text: 'Disagree', value: 2 },
+            { label: 'C', text: 'Neutral/Sometimes', value: 3 },
+            { label: 'D', text: 'Agree', value: 4 },
+            { label: 'E', text: 'Strongly Agree', value: 5 }
+        ];
+
+        // State
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let allQuestions = [];
+
+        // Initialize
+        function init() {
+            allQuestions = [];
+            PILLARS.forEach((pillar, pillarIndex) => {
+                pillar.questions.forEach((question, qIndex) => {
+                    allQuestions.push({
+                        pillarIndex: pillarIndex,
+                        pillarName: pillar.name,
+                        questionText: question,
+                        globalIndex: allQuestions.length
+                    });
+                });
+            });
+            answers = new Array(allQuestions.length).fill(null);
+        }
+
+        function startAssessment() {
+            showScreen('question-screen');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = allQuestions[currentQuestionIndex];
+            
+            document.getElementById('current-q').textContent = currentQuestionIndex + 1;
+            document.getElementById('pillar-badge').textContent = question.pillarName;
+            document.getElementById('question-text').textContent = question.questionText;
+            
+            const progress = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            const answersContainer = document.getElementById('answers-container');
+            answersContainer.innerHTML = '';
+            
+            ANSWER_OPTIONS.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = 'answer-option';
+                if (answers[currentQuestionIndex] === option.value) {
+                    div.classList.add('selected');
+                }
+                div.innerHTML = `
+                    <span class="answer-label">${option.label}</span>
+                    <span>${option.text}</span>
+                `;
+                div.onclick = () => selectAnswer(option.value, div);
+                answersContainer.appendChild(div);
+            });
+            
+            document.getElementById('prev-btn').style.display = currentQuestionIndex > 0 ? 'block' : 'none';
+        }
+
+        function selectAnswer(value, element) {
+            answers[currentQuestionIndex] = value;
+            
+            document.querySelectorAll('.answer-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            setTimeout(() => {
+                if (currentQuestionIndex < allQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                } else {
+                    showResults();
+                }
+            }, 300);
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function showResults() {
+            const totalScore = answers.reduce((sum, val) => sum + (val || 0), 0);
+            
+            const pillarScores = PILLARS.map((pillar, index) => {
+                const pillarAnswers = answers.filter((_, i) => 
+                    allQuestions[i].pillarIndex === index
+                );
+                const score = pillarAnswers.reduce((sum, val) => sum + (val || 0), 0);
+                return {
+                    name: pillar.name,
+                    score: score,
+                    maxScore: 30,
+                    percentage: Math.round((score / 30) * 100)
+                };
+            });
+            
+            document.getElementById('total-score').textContent = totalScore;
+            
+            let scoreLevel, scoreBadgeClass, scoreDescription;
+            if (totalScore <= 56) {
+                scoreLevel = "Transactional Learning";
+                scoreBadgeClass = "low";
+                scoreDescription = "Your assessment reveals learning operates primarily as a compliance function rather than a strategic capability. Training happens when mandated by regulations or when obvious skill gaps create business problems. Systematic investment in building organizational learning capability is limited.";
+            } else if (totalScore <= 88) {
+                scoreLevel = "Inconsistent Learning Culture";
+                scoreBadgeClass = "mid";
+                scoreDescription = "Your organization demonstrates learning capability in pockets but lacks systematic execution. You've invested in infrastructure - likely an LMS, training budgets, development planning processes. Some managers champion employee development. Some teams have strong learning cultures. But consistency is the gap.";
+            } else {
+                scoreLevel = "Systematic Learning Culture";
+                scoreBadgeClass = "high";
+                scoreDescription = "Your organization has built meaningful learning capability. Infrastructure enables systematic development. Managers actively support employee growth. Learning is valued organizationally, not just in L&D statements. You're capturing evidence that learning translates to business impact.";
+            }
+            
+            const badgeEl = document.getElementById('score-badge');
+            badgeEl.textContent = scoreLevel;
+            badgeEl.className = `score-badge ${scoreBadgeClass}`;
+            
+            document.getElementById('score-description').innerHTML = `<p>${scoreDescription}</p>`;
+            
+            const pillarResultsHTML = pillarScores.map(pillar => `
+                <div class="pillar-result">
+                    <h4 style="font-weight: 700; color: var(--effilor-purple); margin-bottom: 0.5rem;">${pillar.name}</h4>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--text-dark);">${pillar.score}/30</span>
+                        <span style="font-size: 1.2rem; color: var(--text-gray);">${pillar.percentage}%</span>
+                    </div>
+                    <div class="pillar-bar">
+                        <div class="pillar-bar-fill" style="width: ${pillar.percentage}%"></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('pillar-results').innerHTML = pillarResultsHTML;
+            
+            const sortedPillars = [...pillarScores].sort((a, b) => b.score - a.score);
+            document.getElementById('top-strength').textContent = sortedPillars[0].name;
+            document.getElementById('priority-area').textContent = sortedPillars[sortedPillars.length - 1].name;
+            
+            showScreen('results-screen');
+        }
+
+        function showEmailForm() {
+            showScreen('email-screen');
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                organization: document.getElementById('organization').value,
+                role: document.getElementById('role').value,
+                phone: document.getElementById('phone').value || 'Not provided',
+                totalScore: answers.reduce((sum, val) => sum + (val || 0), 0),
+                pillarScores: PILLARS.map((pillar, index) => {
+                    const pillarAnswers = answers.filter((_, i) => 
+                        allQuestions[i].pillarIndex === index
+                    );
+                    return {
+                        name: pillar.name,
+                        score: pillarAnswers.reduce((sum, val) => sum + (val || 0), 0)
+                    };
+                }),
+                answers: answers,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    document.getElementById('user-name').textContent = formData.name.split(' ')[0];
+                    document.getElementById('user-email').textContent = formData.email;
+                    showScreen('thankyou-screen');
+                } else {
+                    alert('There was an error submitting your information. Please try again or contact us directly at shankar.ramamurthy@effilor.com');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send My Report';
+                }
+            } catch (error) {
+                alert('There was an error submitting your information. Please try again or contact us directly at shankar.ramamurthy@effilor.com');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send My Report';
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        init();
+    </script>
+</body>
+</html>

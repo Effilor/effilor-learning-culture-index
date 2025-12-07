@@ -1,0 +1,11 @@
+{
+  "name": "organizational-learning-culture-index",
+  "version": "1.0.0",
+  "description": "Assessment tool for evaluating organizational learning culture",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0"
+  },
+  "engines": {
+    "node": ">=14.x"
+  }
+}
