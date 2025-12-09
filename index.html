@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizational Learning Culture Index - Effilor Consulting Services</title>
     <meta name="description" content="Assess your organization's capability to enable, support, sustain, and capture value from learning">
-    <!-- Tailwind CDN: Console warning is safe to ignore. For production optimization, consider installing Tailwind as PostCSS plugin. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom purple color for Effilor brand */
         .effilor-purple {
             background-color: #6B3D7A;
         }
@@ -19,7 +17,6 @@
             border-color: #6B3D7A;
         }
         
-        /* Smooth transitions */
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
@@ -29,12 +26,10 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Progress bar animation */
         .progress-bar {
             transition: width 0.3s ease-in-out;
         }
         
-        /* Button hover effects */
         .btn-primary {
             background-color: #6B3D7A;
             transition: opacity 0.2s;
@@ -44,7 +39,6 @@
             opacity: 0.9;
         }
         
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -62,7 +56,6 @@
             background: #4a2752;
         }
         
-        /* Simple bar chart styles */
         .bar-chart {
             display: flex;
             flex-direction: column;
@@ -112,16 +105,14 @@
     <div id="app"></div>
 
     <script>
-        // Logo URL
         const LOGO_URL = "./effilor-logo.jpg";
 
-        // Assessment questions organized by pillar
         const questions = [
             // Learning Infrastructure (6 questions)
             { pillar: 'Learning Infrastructure', text: 'We conduct structured skill gap analyses at least twice a year for all employees' },
             { pillar: 'Learning Infrastructure', text: 'Learning pathways are clearly defined and aligned to specific career progression routes' },
             { pillar: 'Learning Infrastructure', text: 'Employees have easy access to learning resources without requiring multiple approvals or budget justifications' },
-            { pillar: 'Learning Infrastructure', text: 'Learning opportunities are systematically communicated through established channels, not shared informally' },
+            { pillar: 'Learning Infrastructure', text: 'Employees can access learning resources in the flow of work (microlearning, job aids, digital platforms) not just through scheduled programs' },
             { pillar: 'Learning Infrastructure', text: 'Individual development plans are created during performance reviews and tracked quarterly' },
             { pillar: 'Learning Infrastructure', text: 'We maintain a catalog of required competencies for each role level across the organization' },
             
@@ -138,19 +129,18 @@
             { pillar: 'Learning Culture', text: 'We have regular forums where teams present learnings from projects or training to their peers' },
             { pillar: 'Learning Culture', text: 'Employees who apply new skills are given opportunities to use them in meaningful work assignments' },
             { pillar: 'Learning Culture', text: 'Learning achievements are recognized in town halls, newsletters, or team meetings at least quarterly' },
-            { pillar: 'Learning Culture', text: 'Cross-functional knowledge sharing happens through structured channels, not just informal conversations' },
+            { pillar: 'Learning Culture', text: 'We have active mechanisms for peer-to-peer learning (communities of practice, digital knowledge sharing, collaborative platforms) beyond formal training' },
             { pillar: 'Learning Culture', text: 'Our senior leaders regularly discuss their own learning journeys publicly to model continuous development' },
             
             // Learning Impact (6 questions)
-            { pillar: 'Learning Impact', text: 'We systematically collect feedback from learners on how they\'ve applied new skills within 90 days of training' },
+            { pillar: 'Learning Impact', text: 'We conduct structured follow-up interviews 60-90 days post-training to document specific instances of skill application with measurable business impact' },
             { pillar: 'Learning Impact', text: 'When employees are promoted or achieve significant wins, we document whether learning programs contributed' },
-            { pillar: 'Learning Impact', text: 'We track capability growth for teams over 12-month periods using observable performance indicators' },
+            { pillar: 'Learning Impact', text: 'We track capability growth for teams over 12-month periods using concrete performance indicators and observable skill improvements' },
             { pillar: 'Learning Impact', text: 'Learning impact data is presented to leadership at least twice a year with specific business examples' },
-            { pillar: 'Learning Impact', text: 'We compare performance metrics before and after major learning interventions to measure effectiveness' },
-            { pillar: 'Learning Impact', text: 'Success stories linking learning to business outcomes are documented and shared across the organization' }
+            { pillar: 'Learning Impact', text: 'We compare performance metrics before and after major learning interventions using control groups or baseline measurements' },
+            { pillar: 'Learning Impact', text: 'We maintain a database of learning impact cases with quantified business metrics (revenue, cost savings, efficiency gains) that leadership references in planning discussions' }
         ];
 
-        // Application state
         const state = {
             currentScreen: 'welcome',
             currentQuestion: 0,
@@ -164,7 +154,6 @@
             }
         };
 
-        // Answer options
         const answerOptions = [
             { value: 1, label: 'Strongly Disagree' },
             { value: 2, label: 'Disagree' },
@@ -173,7 +162,6 @@
             { value: 5, label: 'Strongly Agree' }
         ];
 
-        // Calculate results
         function calculateResults() {
             const totalScore = state.answers.reduce((sum, val) => sum + (val || 0), 0);
             
@@ -214,7 +202,6 @@
             return { totalScore, pillarScores, level };
         }
 
-        // Get level for individual pillar
         function getPillarLevel(score) {
             if (score >= 25) return { name: 'Strong', color: 'bg-green-100 text-green-800' };
             if (score >= 19) return { name: 'Developing', color: 'bg-blue-100 text-blue-800' };
@@ -222,7 +209,6 @@
             return { name: 'Needs Focus', color: 'bg-red-100 text-red-800' };
         }
 
-        // Get pillar-specific feedback
         function getPillarFeedback(pillarName, score) {
             const feedbacks = {
                 'Learning Infrastructure': {
@@ -258,7 +244,6 @@
             return pillarFeedback.needsFocus;
         }
 
-        // Navigation functions
         function startAssessment() {
             state.currentScreen = 'questions';
             render();
@@ -330,7 +315,6 @@
             }
         }
 
-        // Render functions
         function renderWelcome() {
             return `
                 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
@@ -438,37 +422,32 @@
                         <img src="${LOGO_URL}" alt="Effilor Consulting Services" style="width: 120px; height: auto;" class="object-contain">
                     </div>
                     <div class="max-w-3xl mx-auto px-4 py-8">
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center mb-2">
+                        <div class="mb-6 text-center">
+                            <div class="flex justify-center items-center mb-2">
                                 <span class="text-sm font-medium text-gray-600">Question ${state.currentQuestion + 1} of ${questions.length}</span>
-                                <span class="text-sm font-medium effilor-purple-text">${Math.round(progress)}%</span>
+                                <span class="ml-4 text-sm font-medium effilor-purple-text">${Math.round(progress)}%</span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="w-full max-w-md mx-auto bg-gray-200 rounded-full h-2.5">
                                 <div class="effilor-purple h-2.5 rounded-full progress-bar" style="width: ${progress}%"></div>
                             </div>
                         </div>
 
                         <div class="bg-white rounded-2xl shadow-xl p-8 fade-in">
-                            <div class="mb-6">
-                                <span class="inline-block px-4 py-2 bg-purple-100 effilor-purple-text rounded-full text-sm font-semibold mb-4">
-                                    ${question.pillar}
-                                </span>
-                                <h2 class="text-2xl font-bold text-gray-900 leading-tight">
-                                    ${question.text}
-                                </h2>
-                            </div>
+                            <h2 class="text-2xl font-bold text-gray-900 leading-tight mb-8 text-center">
+                                ${question.text}
+                            </h2>
 
                             <div class="space-y-3">
                                 ${answerOptions.map(option => `
                                     <button
                                         onclick="handleAnswer(${option.value})"
-                                        class="w-full text-left p-4 border-2 rounded-xl transition-all ${
+                                        class="w-full text-center p-4 border-2 rounded-xl transition-all ${
                                             state.answers[state.currentQuestion] === option.value
                                                 ? 'effilor-purple-border effilor-purple text-white'
                                                 : 'border-gray-300 hover:effilor-purple-border hover:bg-purple-50'
                                         }"
                                     >
-                                        <span class="font-semibold">${option.label}</span>
+                                        <span class="font-semibold text-lg">${option.label}</span>
                                     </button>
                                 `).join('')}
                             </div>
@@ -502,7 +481,6 @@
                             <p class="text-gray-600">Based on your responses across 4 key pillars</p>
                         </div>
 
-                        <!-- Overall Score -->
                         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 text-center fade-in">
                             <h2 class="text-2xl font-bold text-gray-900 mb-4">Overall Learning Culture Score</h2>
                             <div class="text-7xl font-bold mb-4 effilor-purple-text">
@@ -517,7 +495,6 @@
                             </p>
                         </div>
 
-                        <!-- Pillar Breakdown Bar Chart -->
                         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 fade-in">
                             <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Pillar-by-Pillar Breakdown</h3>
                             <div class="bar-chart">
@@ -537,7 +514,6 @@
                             </div>
                         </div>
 
-                        <!-- Key Insights -->
                         <div class="grid md:grid-cols-2 gap-8 mb-8 fade-in">
                             <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-6">
                                 <h3 class="text-xl font-bold text-green-800 mb-3">🎯 Top Strength</h3>
@@ -562,7 +538,6 @@
                             </div>
                         </div>
 
-                        <!-- Detailed Pillar Analysis -->
                         <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 fade-in">
                             <h3 class="text-2xl font-bold text-gray-900 mb-6">Detailed Pillar Analysis</h3>
                             <div class="space-y-6">
@@ -591,7 +566,6 @@
                             </div>
                         </div>
 
-                        <!-- CTA to Email -->
                         <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl shadow-xl p-8 text-center text-white mb-8 fade-in">
                             <h3 class="text-3xl font-bold mb-4">Want Your Complete Learning Culture Analysis?</h3>
                             <p class="text-xl mb-4">Get a copy of this breakdown including:</p>
@@ -799,7 +773,6 @@
             `;
         }
 
-        // Main render function
         function render() {
             const app = document.getElementById('app');
             
@@ -824,7 +797,6 @@
             window.scrollTo(0, 0);
         }
 
-        // Initial render
         render();
     </script>
 </body>
