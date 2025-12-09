@@ -1,7 +1,6 @@
 const sgMail = require('@sendgrid/mail');
 
 module.exports = async (req, res) => {
-  // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -22,38 +21,31 @@ module.exports = async (req, res) => {
   try {
     const { name, email, company, role, phone, answers, timestamp } = req.body;
 
-    // Validate required fields
     if (!name || !email || !company || !role) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Set SendGrid API key
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    // Calculate scores
     const questions = [
-      // Learning Infrastructure (6 questions)
       { pillar: 'Learning Infrastructure' },
       { pillar: 'Learning Infrastructure' },
       { pillar: 'Learning Infrastructure' },
       { pillar: 'Learning Infrastructure' },
       { pillar: 'Learning Infrastructure' },
       { pillar: 'Learning Infrastructure' },
-      // Learning Support (6 questions)
       { pillar: 'Learning Support' },
       { pillar: 'Learning Support' },
       { pillar: 'Learning Support' },
       { pillar: 'Learning Support' },
       { pillar: 'Learning Support' },
       { pillar: 'Learning Support' },
-      // Learning Culture (6 questions)
       { pillar: 'Learning Culture' },
       { pillar: 'Learning Culture' },
       { pillar: 'Learning Culture' },
       { pillar: 'Learning Culture' },
       { pillar: 'Learning Culture' },
       { pillar: 'Learning Culture' },
-      // Learning Impact (6 questions)
       { pillar: 'Learning Impact' },
       { pillar: 'Learning Impact' },
       { pillar: 'Learning Impact' },
@@ -77,7 +69,6 @@ module.exports = async (req, res) => {
       }
     });
 
-    // Determine score level
     let scoreLevel;
     if (totalScore <= 56) {
       scoreLevel = "Transactional Learning";
@@ -87,18 +78,16 @@ module.exports = async (req, res) => {
       scoreLevel = "Systematic Learning Culture";
     }
 
-    // Format pillar scores
     const pillarScoresText = Object.entries(pillarScores)
       .map(([pillar, score]) => `${pillar}: ${score}/30 (${Math.round((score / 30) * 100)}%)`)
       .join('\n');
 
-    // Full question text
     const fullQuestions = [
       // Learning Infrastructure
       'We conduct structured skill gap analyses at least twice a year for all employees',
       'Learning pathways are clearly defined and aligned to specific career progression routes',
       'Employees have easy access to learning resources without requiring multiple approvals or budget justifications',
-      'Learning opportunities are systematically communicated through established channels, not shared informally',
+      'Employees can access learning resources in the flow of work (microlearning, job aids, digital platforms) not just through scheduled programs',
       'Individual development plans are created during performance reviews and tracked quarterly',
       'We maintain a catalog of required competencies for each role level across the organization',
       // Learning Support
@@ -113,15 +102,15 @@ module.exports = async (req, res) => {
       'We have regular forums where teams present learnings from projects or training to their peers',
       'Employees who apply new skills are given opportunities to use them in meaningful work assignments',
       'Learning achievements are recognized in town halls, newsletters, or team meetings at least quarterly',
-      'Cross-functional knowledge sharing happens through structured channels, not just informal conversations',
+      'We have active mechanisms for peer-to-peer learning (communities of practice, digital knowledge sharing, collaborative platforms) beyond formal training',
       'Our senior leaders regularly discuss their own learning journeys publicly to model continuous development',
       // Learning Impact
-      'We systematically collect feedback from learners on how they\'ve applied new skills within 90 days of training',
+      'We conduct structured follow-up interviews 60-90 days post-training to document specific instances of skill application with measurable business impact',
       'When employees are promoted or achieve significant wins, we document whether learning programs contributed',
-      'We track capability growth for teams over 12-month periods using observable performance indicators',
+      'We track capability growth for teams over 12-month periods using concrete performance indicators and observable skill improvements',
       'Learning impact data is presented to leadership at least twice a year with specific business examples',
-      'We compare performance metrics before and after major learning interventions to measure effectiveness',
-      'Success stories linking learning to business outcomes are documented and shared across the organization'
+      'We compare performance metrics before and after major learning interventions using control groups or baseline measurements',
+      'We maintain a database of learning impact cases with quantified business metrics (revenue, cost savings, efficiency gains) that leadership references in planning discussions'
     ];
 
     const answerLabels = ['', 'Strongly Disagree', 'Disagree', 'Neutral/Sometimes', 'Agree', 'Strongly Agree'];
@@ -132,7 +121,6 @@ module.exports = async (req, res) => {
       return `Q${index + 1} [${pillar}]: ${questionText}\nAnswer: ${answerLabels[answerValue]} (${answerValue} point${answerValue !== 1 ? 's' : ''})`;
     }).join('\n\n');
 
-    // Email content
     const emailContent = `
 NEW ORGANIZATIONAL LEARNING CULTURE INDEX SUBMISSION
 =====================================================
